@@ -41,7 +41,7 @@ class FactCheckAPI:
             return []
 
 class FakeNewsChecker:
-    def __init__(self, news_api, fact_check_api): #this doesn't work idk whyyyyy
+    def __init__(self, news_api, fact_check_api): #this doesn't work idk whyyyyy edit: it sort of works but not rlly
         self.news_api = news_api
         self.fact_check_api = fact_check_api
 
