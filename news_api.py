@@ -17,7 +17,7 @@ class API: #parent class
 
 
 
-class News_API(API):
+class News_API(API): #child class inheriting the parent class
     def __init__(self, api_key, api_url):
         super().__init__(api_key, api_url)        
 

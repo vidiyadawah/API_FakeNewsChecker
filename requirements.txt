@@ -1,0 +1,4 @@
+scikit-learn
+newspaper3k
+seaborn
+matplotlib
