@@ -1,39 +1,46 @@
 from news_api import News_API
 from config import key, api_url
 from predict_news import NaiveBayesClassifier
+import pandas as pd
 
 def main():
     #Test that the API works, Can get the article from the title
     #Need to add more error handling and second option
-    #Ex Title: Inside Elon Musk’s messy breakup with OpenAI
-    news_api = News_API(api_key=key, api_url=api_url)
-    classifer = NaiveBayesClassifier()
+    #Ex Title: Inside Elon Musk’s messy breakup with OpenAI, Mortgage Predictions: Uncertainty over Trump Sent Rates Higher. Here's What's Next
+    api_key = key
+    api_URL = api_url
+
+    classifier = NaiveBayesClassifier()
+    news_api = News_API(api_key, api_URL, classifier)
+
+    news_api.train_the_classifier()
+
+    # fake_data = pd.read_csv('fake.csv')   # You may want to try Git Large File Storage - https://git-lfs.github.com.
+    # true_data = pd.read_csv('true.csv') #both files are over 50MB fix this later
+
+    # fake_data['label'] = 'Fake'
+    # true_data['label'] = 'Real'
+
+    # combined_data = pd.concat([fake_data, true_data], ignore_index=True)
+    # classifer.train_the_model(combined_data)
+
+    print("Hello welcome to Fake News Checker!\n This program is designed to let you the user, check to see if the article you are reading has correct information or if it has fake information.\n Please proceed to get started\n")
+
     choice = '0'
 
     while choice != '3':
-        print(f"Current choice: {choice}")
         choice = input("Press 1 to search by title. \nPress 2 to search by url. \nPress 3 to quit.\n")
         if choice == '1':
             print("Searching by title...")
-            query = input("Type in the title of a news article.")
-            articles = news_api.get_news(query, page_size=1) #only gets one article
-            if articles:
-                article = articles[0]
-                print(f"\nTitle: {article['title']}")
-
-                full_article = news_api.scrape_article(articles, article['title'])
-                if full_article:
-                    print("\nFound the full article.\n")
-                    # print(full_article)   #Instead of printing the full article just print a preview
-                    predicition = classifer.predict(full_article)
-                    print(f"This news article is {predicition}.")
-
-                else:
-                    print("I was not able to get the article.")
+            title = input("Type in the title of a news article.")
+            prediction = news_api.article_by_title(title, title)
+            if prediction:
+                print(f"{title} is {prediction}.")
             else:
-                print("Could not find an article with that title. Try double checking the correct title. Or search using a keyword or phrase instead.")
+                print("Could not find an article with that title. Try double checking the correct title. Or search using a keyword or phrase instead. If it still doesn't work try searching by url instead.")
         elif choice == '2':
-            print("Please enter the correct URL.")
+            url = input("Please enter the URL of the article you would like to check.")
+            news_api.article_by_URL(url)
 
         elif choice == '3':
             print("Thank you for using the program. Goodbye!")
@@ -44,5 +51,5 @@ def main():
             
             
 
-# if __name__ == "__main__":
-#     main()
+if __name__ == "__main__":
+    main()
