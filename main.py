@@ -1,7 +1,7 @@
 from news_api import News_API
 from config import key, api_url
 from predict_news import NaiveBayesClassifier
-from visual import FakeNewsCloud, TrueNewsCloud, FakeNewsSentiment, TrueNewsSentiment
+from visual import FakeNewsCloud, TrueNewsCloud, ArticleWordCloud, FakeNewsSentiment, TrueNewsSentiment
 
 
 def main():
@@ -26,12 +26,12 @@ def main():
             title = input("Type in the title of a news article.\n")
             prediction = news_api.article_by_title(title, title)
             if prediction:
-                print(f"{title} is {prediction} news.")
+                print(f"{title} is predicted to be {prediction} news.")
                 article_text = news_api.scrape_article(news_api.get_news(title), title)
             else:
                 print("Could not find an article with that title. Try double checking the correct title. If it still doesn't work try searching by url instead.")
-            print("\n Would you like to see a visual of the data? Press 1 for yes and 2 for no.")
-            option = input("\nPress 1 or 2.")
+            print("\n Would you like to see a Sentimental Analysis of the data? Or a Word Cloud of the article? Press 1 for a Sentimental Analysis, 2 for a Word Cloud, or 3 to exit.")
+            option = input("\nPress 1, 2 or 3.")
             if option == '1':
                 print("Loading the visualization please give me a moment...")
                 if article_text:
@@ -43,8 +43,15 @@ def main():
                         true_sentiment.analyze_true_sentiment(article_text)
                 else:
                     print("Could not load the visual sorry!")
+            elif option == '2':
+                if 'article_text' in locals() and article_text:
+                    print("Loading the visualization please give me a moment...")
+                    article_wordcloud = ArticleWordCloud()
+                    article_wordcloud.gen_article_cloud(article_text)
+                else:
+                    print("Could not make the Word Cloud sorry!")
             else:
-                print("Alirght.")
+                print("Alright.")
         elif choice == '2':
             url = input("Please enter the URL of the article you would like to check.")
             news_api.article_by_URL(url)
