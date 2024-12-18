@@ -4,22 +4,22 @@ from newspaper import Article
 import pandas as pd
 from predict_news import NaiveBayesClassifier
 
-class API: #parent class
+class API: #parent class to handle the API behind the scenes logic 
     def __init__(self, api_key, api_url):
         self.API_key = api_key
         self.API_url = api_url
 
     def make_request(self, params):
-        response = requests.get(self.API_url, params=params)
-        if response.status_code == 200:
+        response = requests.get(self.API_url, params=params) #sends a get request to the API with the params
+        if response.status_code == 200: #checks if the request went through
             return response.json()
-        else:
+        else: #error handling 
             print(f"Something went wrong with the API: {response.status_code}, {response.json()}")
             return None
 
 class ClassifierModel: #another parent class
     def __init__(self, classifier=None):   
-        if classifier is None:
+        if classifier is None: #defaults to the Niave Bayes model
             self.classifier = NaiveBayesClassifier()
         else:
             self.classifier = classifier
@@ -32,10 +32,10 @@ class ClassifierModel: #another parent class
         true_data['label'] = 'Real'
 
         self.combined_data = pd.concat([fake_data, true_data], ignore_index=True)
-        self.classifier.train_the_model(self.combined_data)
+        self.classifier.train_the_model(self.combined_data) #training the model after combining the datasets
     
     def predict_article(self, text):
-        return self.classifier.predict(text)
+        return self.classifier.predict(text) #does the predict
 
 
 class News_API(API, ClassifierModel): #child class inheriting the parent class
@@ -47,8 +47,7 @@ class News_API(API, ClassifierModel): #child class inheriting the parent class
         params = {"q" : query, "language" : language, "pageSize" : page_size, "APIkey" : self.API_key}
         response_data = self.make_request(params)
         if response_data:
-            #print(f"API Respnse: {response_data}") #check if the Api is working
-            return response_data.get("articles", [])
+            return response_data.get("articles", []) #if the page size is greater than 1 this would return a list of articles
         else:
             print(f"There was an error with the API and we couldn't find your article: {response_data.status_code}, {response_data.json()}") #error handling if the article can't be found
             return []
@@ -60,7 +59,7 @@ class News_API(API, ClassifierModel): #child class inheriting the parent class
                 scraped_article = Article(article_url)
                 scraped_article.download() #downlads the html from the url of the article
                 scraped_article.parse()
-                article_text = scraped_article.text
+                article_text = scraped_article.text #stores the article in a variable to be used later
                 return article_text
             else: 
                 print(f"Can't find the article, so I can't complete this task.")
@@ -82,7 +81,7 @@ class News_API(API, ClassifierModel): #child class inheriting the parent class
     def article_by_title(self, query, title): #gets the article from the user inputting a title
         articles = self.get_news(query, page_size=3) #only gets a few article
         if articles:
-            for article in articles:
+            for article in articles: #looks for a match 
                 if title.strip().lower() in article['title'].strip().lower():
                     full_article = self.scrape_article(articles, title)
             if full_article:
