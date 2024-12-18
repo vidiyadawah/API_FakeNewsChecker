@@ -19,7 +19,7 @@ def main():
     option = '0'
 
     while choice != '5': #doesn't end unless the user decides to quit by pressing 5
-        choice = input("Press 1 to search by title. \nPress 2 to search by url. \nPress 3 to see a word cloud of fake news. \nPress 4 to see a world cloud of real news. \nPress 5 to quit.\n")
+        choice = input("Press 1 to search by title. \nPress 2 to search by url. \nPress 3 to see a word cloud of fake news. \nPress 4 to see a word cloud of real news. \nPress 5 to quit.\n")
         if choice == '1':
             print("You have selected searching by title...")
             title = input("Type in the title of a news article.\n")
