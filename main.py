@@ -13,7 +13,7 @@ def main():
 
     news_api.train_the_classifier("fake.csv", "true.csv") #trains the model
 
-    print("Hello welcome to Fake News Checker!\nThis program is designed to let you the user, check to see if the article you are reading has correct information or if it has fake information.\nPlease proceed to get started\n")
+    print("Hello welcome to Fake News Checker!\nThis program is designed to let you the user, check to see if the article you are reading has correct information or if it has fake information.\nPlease proceed to get started.\n")
 
     choice = '0' #intializes the choice and option to 0 so the loop can run
     option = '0'
@@ -29,7 +29,7 @@ def main():
                 article_text = news_api.scrape_article(news_api.get_news(title), title)
             else:
                 print("Could not find an article with that title. Try double checking the correct title. If it still doesn't work try searching by url instead.") #if we can't find the article
-            print("\n Would you like to see a Sentimental Analysis of the data? Or a Word Cloud of the article? Press 1 for a Sentimental Analysis, 2 for a Word Cloud, or 3 to exit.")
+            print("\nWould you like to see a Sentimental Analysis of the data? Or a Word Cloud of the article? Press 1 for a Sentimental Analysis, 2 for a Word Cloud, or 3 to exit.")
             option = input("\nPress 1, 2 or 3.")
             if option == '1': #creates a pie chart
                 print("Loading the visualization please give me a moment...")
